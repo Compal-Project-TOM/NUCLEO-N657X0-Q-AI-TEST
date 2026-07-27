@@ -80,51 +80,6 @@ void HAL_MspInit(void)
 }
 
 /**
-  * @brief CACHEAXI MSP Initialization
-  * This function configures the hardware resources used in this example
-  * @param hcacheaxi: CACHEAXI handle pointer
-  * @retval None
-  */
-void HAL_CACHEAXI_MspInit(CACHEAXI_HandleTypeDef* hcacheaxi)
-{
-  if(hcacheaxi->Instance==CACHEAXI)
-  {
-    /* USER CODE BEGIN CACHEAXI_MspInit 0 */
-
-    /* USER CODE END CACHEAXI_MspInit 0 */
-    /* Peripheral clock enable */
-    __HAL_RCC_CACHEAXI_CLK_ENABLE();
-    /* USER CODE BEGIN CACHEAXI_MspInit 1 */
-
-    /* USER CODE END CACHEAXI_MspInit 1 */
-
-  }
-
-}
-
-/**
-  * @brief CACHEAXI MSP De-Initialization
-  * This function freeze the hardware resources used in this example
-  * @param hcacheaxi: CACHEAXI handle pointer
-  * @retval None
-  */
-void HAL_CACHEAXI_MspDeInit(CACHEAXI_HandleTypeDef* hcacheaxi)
-{
-  if(hcacheaxi->Instance==CACHEAXI)
-  {
-    /* USER CODE BEGIN CACHEAXI_MspDeInit 0 */
-
-    /* USER CODE END CACHEAXI_MspDeInit 0 */
-    /* Peripheral clock disable */
-    __HAL_RCC_CACHEAXI_CLK_DISABLE();
-    /* USER CODE BEGIN CACHEAXI_MspDeInit 1 */
-
-    /* USER CODE END CACHEAXI_MspDeInit 1 */
-  }
-
-}
-
-/**
   * @brief XSPI MSP Initialization
   * This function configures the hardware resources used in this example
   * @param hxspi: XSPI handle pointer
@@ -143,7 +98,9 @@ void HAL_XSPI_MspInit(XSPI_HandleTypeDef* hxspi)
   /** Initializes the peripherals clock
   */
     PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_XSPI2;
-    PeriphClkInitStruct.Xspi2ClockSelection = RCC_XSPI2CLKSOURCE_HCLK;
+    PeriphClkInitStruct.Xspi2ClockSelection = RCC_XSPI2CLKSOURCE_IC3;
+    PeriphClkInitStruct.ICSelection[RCC_IC3].ClockSelection = RCC_ICCLKSOURCE_PLL1;
+    PeriphClkInitStruct.ICSelection[RCC_IC3].ClockDivider = 32;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
     {
       Error_Handler();
