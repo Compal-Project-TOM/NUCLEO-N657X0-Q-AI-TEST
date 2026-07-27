@@ -35,7 +35,7 @@ extern "C" {
   */
 #define HAL_MODULE_ENABLED
 /*#define HAL_ADC_MODULE_ENABLED   */
-/*#define HAL_BSEC_MODULE_ENABLED   */
+#define HAL_BSEC_MODULE_ENABLED
 /*#define HAL_CRC_MODULE_ENABLED   */
 /*#define HAL_CRYP_MODULE_ENABLED   */
 /*#define HAL_DCMI_MODULE_ENABLED   */
@@ -80,7 +80,7 @@ extern "C" {
 /*#define HAL_SPI_MODULE_ENABLED   */
 /*#define HAL_SRAM_MODULE_ENABLED   */
 /*#define HAL_TIM_MODULE_ENABLED   */
-#define HAL_UART_MODULE_ENABLED
+/*#define HAL_UART_MODULE_ENABLED   */
 /*#define HAL_USART_MODULE_ENABLED   */
 /*#define HAL_WWDG_MODULE_ENABLED   */
 #define HAL_XSPI_MODULE_ENABLED
@@ -101,7 +101,7 @@ extern "C" {
   *        (when HSE is used as system clock source, directly or through the PLL).
   */
 #if !defined  (HSE_VALUE)
-#define HSE_VALUE              24000000UL /*!< Value of the External oscillator in Hz */
+#define HSE_VALUE              48000000UL /*!< Value of the External oscillator in Hz */
 #endif /* HSE_VALUE */
 
 #if !defined  (HSE_STARTUP_TIMEOUT)
@@ -144,15 +144,6 @@ extern "C" {
 #define LSI_VALUE               32000UL    /*!< LSI Typical Value in Hz */
 #endif /* LSI_VALUE */                     /*!< Value of the Internal Low Speed oscillator in Hz */
 /* The real value may vary depending on the variations in voltage and temperature.*/
-
-/**
-  * @brief External clock source for digital audio interfaces: SPI/I2S, SAI and ADF
-  *        This value is used by the RCC HAL module to provide the digital audio interfaces
-  *        frequency. This clock source is inserted directly through I2S_CKIN pad.
-  */
-#if !defined  (EXTERNAL_CLOCK_VALUE)
-#define EXTERNAL_CLOCK_VALUE      12288000UL /*!< Value of the external clock source in Hz */
-#endif /* EXTERNAL_CLOCK_VALUE */
 
 /* Tip: To avoid modifying this file each time you need to use different HSE,
    ===  you can define the HSE value in your toolchain compiler preprocessor. */

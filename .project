@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>NUCLEO-N657X0-Q-AI-TEST</name>
+	<name>Test_XiP_EXT_MEMLOADER_260629_1</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -14,6 +14,7 @@
 		<nature>com.st.stm32cube.ide.mcu.MCURootPythonProjectNature</nature>
 		<nature>com.st.stm32cube.ide.mcu.MCUAppliPythonEnabledProjectNature</nature>
 		<nature>com.st.stm32cube.ide.mcu.MCUFsblEnabledProjectNature</nature>
+		<nature>com.st.stm32cube.ide.mcu.MCUExtMemLoaderEnabledProjectNature</nature>
 		<nature>com.st.stm32cube.ide.mcu.MCUSingleCpuProjectNature</nature>
 	</natures>
 </projectDescription>

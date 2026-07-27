@@ -68,11 +68,7 @@ void HAL_MspInit(void)
 
   /* System interrupt init*/
 
-  HAL_PWREx_EnableVddIO2();
-
   HAL_PWREx_EnableVddIO3();
-
-  HAL_PWREx_EnableVddIO4();
 
   /* USER CODE BEGIN MspInit 1 */
 
@@ -125,104 +121,85 @@ void HAL_CACHEAXI_MspDeInit(CACHEAXI_HandleTypeDef* hcacheaxi)
 }
 
 /**
-  * @brief XSPI MSP Initialization
+  * @brief UART MSP Initialization
   * This function configures the hardware resources used in this example
-  * @param hxspi: XSPI handle pointer
+  * @param huart: UART handle pointer
   * @retval None
   */
-void HAL_XSPI_MspInit(XSPI_HandleTypeDef* hxspi)
+void HAL_UART_MspInit(UART_HandleTypeDef* huart)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
   RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
-  if(hxspi->Instance==XSPI2)
+  if(huart->Instance==LPUART1)
   {
-    /* USER CODE BEGIN XSPI2_MspInit 0 */
+    /* USER CODE BEGIN LPUART1_MspInit 0 */
 
-    /* USER CODE END XSPI2_MspInit 0 */
+    /* USER CODE END LPUART1_MspInit 0 */
 
   /** Initializes the peripherals clock
   */
-    PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_XSPI2;
-    PeriphClkInitStruct.Xspi2ClockSelection = RCC_XSPI2CLKSOURCE_IC3;
-    PeriphClkInitStruct.ICSelection[RCC_IC3].ClockSelection = RCC_ICCLKSOURCE_PLL1;
-    PeriphClkInitStruct.ICSelection[RCC_IC3].ClockDivider = 32;
+    PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_LPUART1;
+    PeriphClkInitStruct.Lpuart1ClockSelection = RCC_LPUART1CLKSOURCE_IC9;
+    PeriphClkInitStruct.ICSelection[RCC_IC9].ClockSelection = RCC_ICCLKSOURCE_PLL2;
+    PeriphClkInitStruct.ICSelection[RCC_IC9].ClockDivider = 20;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
     {
       Error_Handler();
     }
 
     /* Peripheral clock enable */
-    __HAL_RCC_XSPIM_CLK_ENABLE();
-    __HAL_RCC_XSPI2_CLK_ENABLE();
+    __HAL_RCC_LPUART1_CLK_ENABLE();
 
-    __HAL_RCC_GPION_CLK_ENABLE();
-    /**XSPI2 GPIO Configuration
-    PN4     ------> XSPIM_P2_IO2
-    PN6     ------> XSPIM_P2_CLK
-    PN8     ------> XSPIM_P2_IO4
-    PN0     ------> XSPIM_P2_DQS0
-    PN3     ------> XSPIM_P2_IO1
-    PN5     ------> XSPIM_P2_IO3
-    PN1     ------> XSPIM_P2_NCS1
-    PN9     ------> XSPIM_P2_IO5
-    PN2     ------> XSPIM_P2_IO0
-    PN10     ------> XSPIM_P2_IO6
-    PN11     ------> XSPIM_P2_IO7
+    __HAL_RCC_GPIOE_CLK_ENABLE();
+    /**LPUART1 GPIO Configuration
+    PE5     ------> LPUART1_TX
+    PE6     ------> LPUART1_RX
     */
-    GPIO_InitStruct.Pin = OCTOSPI_IO2_Pin|OCTOSPI_CLK_Pin|OCTOSPI_IO4_Pin|OCTOSPI_DQS_Pin
-                          |OCTOSPI_IO1_Pin|OCTOSPI_IO3_Pin|OCTOSPI_NCS_Pin|OCTOSPI_IO5_Pin
-                          |OCTOSPI_IO0_Pin|OCTOSPI_IO6_Pin|OCTOSPI_IO7_Pin;
+    GPIO_InitStruct.Pin = GPIO_PIN_5|GPIO_PIN_6;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF9_XSPIM_P2;
-    HAL_GPIO_Init(GPION, &GPIO_InitStruct);
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.Alternate = GPIO_AF3_LPUART1;
+    HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-    /* USER CODE BEGIN XSPI2_MspInit 1 */
+    /* LPUART1 interrupt Init */
+    HAL_NVIC_SetPriority(LPUART1_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(LPUART1_IRQn);
+    /* USER CODE BEGIN LPUART1_MspInit 1 */
 
-    /* USER CODE END XSPI2_MspInit 1 */
+    /* USER CODE END LPUART1_MspInit 1 */
 
   }
 
 }
 
 /**
-  * @brief XSPI MSP De-Initialization
+  * @brief UART MSP De-Initialization
   * This function freeze the hardware resources used in this example
-  * @param hxspi: XSPI handle pointer
+  * @param huart: UART handle pointer
   * @retval None
   */
-void HAL_XSPI_MspDeInit(XSPI_HandleTypeDef* hxspi)
+void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
 {
-  if(hxspi->Instance==XSPI2)
+  if(huart->Instance==LPUART1)
   {
-    /* USER CODE BEGIN XSPI2_MspDeInit 0 */
+    /* USER CODE BEGIN LPUART1_MspDeInit 0 */
 
-    /* USER CODE END XSPI2_MspDeInit 0 */
+    /* USER CODE END LPUART1_MspDeInit 0 */
     /* Peripheral clock disable */
-    __HAL_RCC_XSPIM_CLK_DISABLE();
-    __HAL_RCC_XSPI2_CLK_DISABLE();
+    __HAL_RCC_LPUART1_CLK_DISABLE();
 
-    /**XSPI2 GPIO Configuration
-    PN4     ------> XSPIM_P2_IO2
-    PN6     ------> XSPIM_P2_CLK
-    PN8     ------> XSPIM_P2_IO4
-    PN0     ------> XSPIM_P2_DQS0
-    PN3     ------> XSPIM_P2_IO1
-    PN5     ------> XSPIM_P2_IO3
-    PN1     ------> XSPIM_P2_NCS1
-    PN9     ------> XSPIM_P2_IO5
-    PN2     ------> XSPIM_P2_IO0
-    PN10     ------> XSPIM_P2_IO6
-    PN11     ------> XSPIM_P2_IO7
+    /**LPUART1 GPIO Configuration
+    PE5     ------> LPUART1_TX
+    PE6     ------> LPUART1_RX
     */
-    HAL_GPIO_DeInit(GPION, OCTOSPI_IO2_Pin|OCTOSPI_CLK_Pin|OCTOSPI_IO4_Pin|OCTOSPI_DQS_Pin
-                          |OCTOSPI_IO1_Pin|OCTOSPI_IO3_Pin|OCTOSPI_NCS_Pin|OCTOSPI_IO5_Pin
-                          |OCTOSPI_IO0_Pin|OCTOSPI_IO6_Pin|OCTOSPI_IO7_Pin);
+    HAL_GPIO_DeInit(GPIOE, GPIO_PIN_5|GPIO_PIN_6);
 
-    /* USER CODE BEGIN XSPI2_MspDeInit 1 */
+    /* LPUART1 interrupt DeInit */
+    HAL_NVIC_DisableIRQ(LPUART1_IRQn);
+    /* USER CODE BEGIN LPUART1_MspDeInit 1 */
 
-    /* USER CODE END XSPI2_MspDeInit 1 */
+    /* USER CODE END LPUART1_MspDeInit 1 */
   }
 
 }

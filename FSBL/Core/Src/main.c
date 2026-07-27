@@ -42,7 +42,6 @@
 
 /* Private variables ---------------------------------------------------------*/
 
-COM_InitTypeDef BspCOMInit;
 CACHEAXI_HandleTypeDef hcacheaxi;
 
 XSPI_HandleTypeDef hxspi2;
@@ -54,15 +53,30 @@ XSPI_HandleTypeDef hxspi2;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_XSPI2_Init(void);
+static void MX_BSEC_Init(void);
 static void MX_CACHEAXI_Init(void);
+static void MX_XSPI2_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+static void OpenDebug(void) {
+	BSEC_HandleTypeDef hbsec;
+	hbsec.Instance = BSEC;
+	BSEC_DebugCfgTypeDef config_debug;
+	config_debug.HDPL_Open_Dbg = HAL_BSEC_OPEN_DBG_LEVEL_0;
+	config_debug.NonSec_Dbg_Auth = HAL_BSEC_NONSEC_DBG_AUTH;
+	config_debug.Sec_Dbg_Auth = HAL_BSEC_SEC_DBG_AUTH;
 
+	if (HAL_BSEC_ConfigDebug(&hbsec, &config_debug) != HAL_OK) {
+		Error_Handler();
+	}
+	if (HAL_BSEC_UnlockDebug(&hbsec) != HAL_OK) {
+		Error_Handler();
+	}
+}
 /* USER CODE END 0 */
 
 /**
@@ -73,8 +87,18 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+  // Open for debugging, authenticate debugging of secure code.
+  // This enables debugging without going through developer mode.
+  OpenDebug();
   /* USER CODE END 1 */
+
+  /* Enable the CPU Cache */
+
+  /* Enable I-Cache---------------------------------------------------------*/
+  SCB_EnableICache();
+
+  /* Enable D-Cache---------------------------------------------------------*/
+  SCB_EnableDCache();
 
   /* MCU Configuration--------------------------------------------------------*/
   HAL_Init();
@@ -92,31 +116,13 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_XSPI2_Init();
+  MX_BSEC_Init();
   MX_CACHEAXI_Init();
+  MX_XSPI2_Init();
   MX_EXTMEM_MANAGER_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
-
-  /* Initialize leds */
-  BSP_LED_Init(LED_BLUE);
-  BSP_LED_Init(LED_RED);
-  BSP_LED_Init(LED_GREEN);
-
-  /* Initialize USER push-button, will be used to trigger an interrupt each time it's pressed.*/
-  BSP_PB_Init(BUTTON_USER, BUTTON_MODE_EXTI);
-
-  /* Initialize COM1 port (115200, 8 bits (7-bit data + 1 stop bit), no parity */
-  BspCOMInit.BaudRate   = 115200;
-  BspCOMInit.WordLength = COM_WORDLENGTH_8B;
-  BspCOMInit.StopBits   = COM_STOPBITS_1;
-  BspCOMInit.Parity     = COM_PARITY_NONE;
-  BspCOMInit.HwFlowCtl  = COM_HWCONTROL_NONE;
-  if (BSP_COM_Init(COM1, &BspCOMInit) != BSP_ERROR_NONE)
-  {
-    Error_Handler();
-  }
 
   /* Launch the application */
   if (BOOT_OK != BOOT_Application())
@@ -127,7 +133,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -197,8 +202,8 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_NONE;
   RCC_OscInitStruct.PLL1.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL1.PLLSource = RCC_PLLSOURCE_HSI;
-  RCC_OscInitStruct.PLL1.PLLM = 4;
-  RCC_OscInitStruct.PLL1.PLLN = 75;
+  RCC_OscInitStruct.PLL1.PLLM = 1;
+  RCC_OscInitStruct.PLL1.PLLN = 25;
   RCC_OscInitStruct.PLL1.PLLFractional = 0;
   RCC_OscInitStruct.PLL1.PLLP1 = 1;
   RCC_OscInitStruct.PLL1.PLLP2 = 1;
@@ -222,26 +227,45 @@ void SystemClock_Config(void)
                               |RCC_CLOCKTYPE_SYSCLK|RCC_CLOCKTYPE_PCLK1
                               |RCC_CLOCKTYPE_PCLK2|RCC_CLOCKTYPE_PCLK5
                               |RCC_CLOCKTYPE_PCLK4;
-  RCC_ClkInitStruct.CPUCLKSource = RCC_CPUCLKSOURCE_IC1;
+  RCC_ClkInitStruct.CPUCLKSource = RCC_CPUCLKSOURCE_HSI;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_IC2_IC6_IC11;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_APB1_DIV1;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_APB2_DIV1;
   RCC_ClkInitStruct.APB4CLKDivider = RCC_APB4_DIV1;
   RCC_ClkInitStruct.APB5CLKDivider = RCC_APB5_DIV1;
-  RCC_ClkInitStruct.IC1Selection.ClockSelection = RCC_ICCLKSOURCE_PLL1;
-  RCC_ClkInitStruct.IC1Selection.ClockDivider = 2;
   RCC_ClkInitStruct.IC2Selection.ClockSelection = RCC_ICCLKSOURCE_PLL1;
-  RCC_ClkInitStruct.IC2Selection.ClockDivider = 3;
-  RCC_ClkInitStruct.IC6Selection.ClockSelection = RCC_ICCLKSOURCE_PLL2;
-  RCC_ClkInitStruct.IC6Selection.ClockDivider = 2;
-  RCC_ClkInitStruct.IC11Selection.ClockSelection = RCC_ICCLKSOURCE_PLL2;
-  RCC_ClkInitStruct.IC11Selection.ClockDivider = 2;
+  RCC_ClkInitStruct.IC2Selection.ClockDivider = 4;
+  RCC_ClkInitStruct.IC6Selection.ClockSelection = RCC_ICCLKSOURCE_PLL1;
+  RCC_ClkInitStruct.IC6Selection.ClockDivider = 4;
+  RCC_ClkInitStruct.IC11Selection.ClockSelection = RCC_ICCLKSOURCE_PLL1;
+  RCC_ClkInitStruct.IC11Selection.ClockDivider = 4;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct) != HAL_OK)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief BSEC Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_BSEC_Init(void)
+{
+
+  /* USER CODE BEGIN BSEC_Init 0 */
+
+  /* USER CODE END BSEC_Init 0 */
+
+  /* USER CODE BEGIN BSEC_Init 1 */
+
+  /* USER CODE END BSEC_Init 1 */
+  /* USER CODE BEGIN BSEC_Init 2 */
+
+  /* USER CODE END BSEC_Init 2 */
+
 }
 
 /**
@@ -328,48 +352,13 @@ static void MX_XSPI2_Init(void)
   */
 static void MX_GPIO_Init(void)
 {
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
   /* USER CODE BEGIN MX_GPIO_Init_1 */
 
   /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOH_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPION_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
-
-  /*Configure GPIO pin : I2C1_SDA_Pin */
-  GPIO_InitStruct.Pin = I2C1_SDA_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  GPIO_InitStruct.Alternate = GPIO_AF4_I2C1;
-  HAL_GPIO_Init(I2C1_SDA_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : I2CA_SCL_Pin */
-  GPIO_InitStruct.Pin = I2CA_SCL_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  GPIO_InitStruct.Alternate = GPIO_AF4_I2C1;
-  HAL_GPIO_Init(I2CA_SCL_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : I2C2_SDA_Pin I2C2_SCL_Pin */
-  GPIO_InitStruct.Pin = I2C2_SDA_Pin|I2C2_SCL_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  GPIO_InitStruct.Alternate = GPIO_AF4_I2C2;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : PA10 UCPD1_VSENSE_Pin */
-  GPIO_InitStruct.Pin = GPIO_PIN_10|UCPD1_VSENSE_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
@@ -382,7 +371,6 @@ static void MX_GPIO_Init(void)
 
 /**
   * @brief  This function is executed in case of error occurrence.
-  * @param None
   * @retval None
   */
 void Error_Handler(void)
