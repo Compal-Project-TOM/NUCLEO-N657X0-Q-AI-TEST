@@ -42,7 +42,6 @@
 /* Private variables ---------------------------------------------------------*/
 
 COM_InitTypeDef BspCOMInit;
-
 CACHEAXI_HandleTypeDef hcacheaxi;
 
 XSPI_HandleTypeDef hxspi2;
@@ -54,7 +53,6 @@ XSPI_HandleTypeDef hxspi2;
 /* Private function prototypes -----------------------------------------------*/
 static void MX_GPIO_Init(void);
 static void MX_XSPI2_Init(void);
-static void MX_BSEC_Init(void);
 static void MX_CACHEAXI_Init(void);
 static void SystemIsolation_Config(void);
 /* USER CODE BEGIN PFP */
@@ -99,7 +97,6 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_XSPI2_Init();
-  MX_BSEC_Init();
   MX_CACHEAXI_Init();
   SystemIsolation_Config();
   /* USER CODE BEGIN 2 */
@@ -117,28 +114,6 @@ int main(void)
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
-}
-
-/**
-  * @brief BSEC Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_BSEC_Init(void)
-{
-
-  /* USER CODE BEGIN BSEC_Init 0 */
-
-  /* USER CODE END BSEC_Init 0 */
-  __HAL_RCC_BSEC_CLK_ENABLE();
-
-  /* USER CODE BEGIN BSEC_Init 1 */
-
-  /* USER CODE END BSEC_Init 1 */
-  /* USER CODE BEGIN BSEC_Init 2 */
-
-  /* USER CODE END BSEC_Init 2 */
-
 }
 
 /**
