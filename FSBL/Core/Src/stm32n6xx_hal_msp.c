@@ -68,7 +68,11 @@ void HAL_MspInit(void)
 
   /* System interrupt init*/
 
+  HAL_PWREx_EnableVddIO2();
+
   HAL_PWREx_EnableVddIO3();
+
+  HAL_PWREx_EnableVddIO4();
 
   /* USER CODE BEGIN MspInit 1 */
 
@@ -165,9 +169,9 @@ void HAL_XSPI_MspInit(XSPI_HandleTypeDef* hxspi)
     PN10     ------> XSPIM_P2_IO6
     PN11     ------> XSPIM_P2_IO7
     */
-    GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_6|GPIO_PIN_8|GPIO_PIN_0
-                          |GPIO_PIN_3|GPIO_PIN_5|GPIO_PIN_1|GPIO_PIN_9
-                          |GPIO_PIN_2|GPIO_PIN_10|GPIO_PIN_11;
+    GPIO_InitStruct.Pin = OCTOSPI_IO2_Pin|OCTOSPI_CLK_Pin|OCTOSPI_IO4_Pin|OCTOSPI_DQS_Pin
+                          |OCTOSPI_IO1_Pin|OCTOSPI_IO3_Pin|OCTOSPI_NCS_Pin|OCTOSPI_IO5_Pin
+                          |OCTOSPI_IO0_Pin|OCTOSPI_IO6_Pin|OCTOSPI_IO7_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
@@ -212,9 +216,9 @@ void HAL_XSPI_MspDeInit(XSPI_HandleTypeDef* hxspi)
     PN10     ------> XSPIM_P2_IO6
     PN11     ------> XSPIM_P2_IO7
     */
-    HAL_GPIO_DeInit(GPION, GPIO_PIN_4|GPIO_PIN_6|GPIO_PIN_8|GPIO_PIN_0
-                          |GPIO_PIN_3|GPIO_PIN_5|GPIO_PIN_1|GPIO_PIN_9
-                          |GPIO_PIN_2|GPIO_PIN_10|GPIO_PIN_11);
+    HAL_GPIO_DeInit(GPION, OCTOSPI_IO2_Pin|OCTOSPI_CLK_Pin|OCTOSPI_IO4_Pin|OCTOSPI_DQS_Pin
+                          |OCTOSPI_IO1_Pin|OCTOSPI_IO3_Pin|OCTOSPI_NCS_Pin|OCTOSPI_IO5_Pin
+                          |OCTOSPI_IO0_Pin|OCTOSPI_IO6_Pin|OCTOSPI_IO7_Pin);
 
     /* USER CODE BEGIN XSPI2_MspDeInit 1 */
 

@@ -37,6 +37,9 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "stm32n6xx_hal.h"
 
+#include "stm32n6xx_nucleo.h"
+#include <stdio.h>
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -75,6 +78,56 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define I2C1_SDA_Pin GPIO_PIN_1
+#define I2C1_SDA_GPIO_Port GPIOC
+#define I2CA_SCL_Pin GPIO_PIN_9
+#define I2CA_SCL_GPIO_Port GPIOH
+#define TRACED1_Pin GPIO_PIN_0
+#define TRACED1_GPIO_Port GPIOB
+#define TRACED3_Pin GPIO_PIN_7
+#define TRACED3_GPIO_Port GPIOB
+#define TRACED2_Pin GPIO_PIN_6
+#define TRACED2_GPIO_Port GPIOB
+#define TRACECLK_Pin GPIO_PIN_3
+#define TRACECLK_GPIO_Port GPIOB
+#define TRACED0_Pin GPIO_PIN_3
+#define TRACED0_GPIO_Port GPIOE
+#define OCTOSPI_IO2_Pin GPIO_PIN_4
+#define OCTOSPI_IO2_GPIO_Port GPION
+#define I2C2_SDA_Pin GPIO_PIN_11
+#define I2C2_SDA_GPIO_Port GPIOB
+#define JTDI_Pin GPIO_PIN_15
+#define JTDI_GPIO_Port GPIOA
+#define OCTOSPI_CLK_Pin GPIO_PIN_6
+#define OCTOSPI_CLK_GPIO_Port GPION
+#define OCTOSPI_IO4_Pin GPIO_PIN_8
+#define OCTOSPI_IO4_GPIO_Port GPION
+#define OCTOSPI_DQS_Pin GPIO_PIN_0
+#define OCTOSPI_DQS_GPIO_Port GPION
+#define OCTOSPI_IO1_Pin GPIO_PIN_3
+#define OCTOSPI_IO1_GPIO_Port GPION
+#define OCTOSPI_IO3_Pin GPIO_PIN_5
+#define OCTOSPI_IO3_GPIO_Port GPION
+#define OCTOSPI_NCS_Pin GPIO_PIN_1
+#define OCTOSPI_NCS_GPIO_Port GPION
+#define SWCLK_Pin GPIO_PIN_14
+#define SWCLK_GPIO_Port GPIOA
+#define UCPD1_VSENSE_Pin GPIO_PIN_11
+#define UCPD1_VSENSE_GPIO_Port GPIOA
+#define OCTOSPI_IO5_Pin GPIO_PIN_9
+#define OCTOSPI_IO5_GPIO_Port GPION
+#define OCTOSPI_IO0_Pin GPIO_PIN_2
+#define OCTOSPI_IO0_GPIO_Port GPION
+#define SWDIO_Pin GPIO_PIN_13
+#define SWDIO_GPIO_Port GPIOA
+#define I2C2_SCL_Pin GPIO_PIN_10
+#define I2C2_SCL_GPIO_Port GPIOB
+#define SWO_Pin GPIO_PIN_5
+#define SWO_GPIO_Port GPIOB
+#define OCTOSPI_IO6_Pin GPIO_PIN_10
+#define OCTOSPI_IO6_GPIO_Port GPION
+#define OCTOSPI_IO7_Pin GPIO_PIN_11
+#define OCTOSPI_IO7_GPIO_Port GPION
 
 /* USER CODE BEGIN Private defines */
 
