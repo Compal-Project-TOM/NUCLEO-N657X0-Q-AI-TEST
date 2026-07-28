@@ -21,6 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "app_x-cube-ai.h"
 #include "stdio.h"
 /* USER CODE END Includes */
 
@@ -103,6 +104,7 @@ int main(void)
   MX_LPUART1_UART_Init();
   SystemIsolation_Config();
   /* USER CODE BEGIN 2 */
+  STM32CubeAI_Studio_AI_Init();
   printf("\r\nN657X0-Q Test AI application start\r\n");
   /* USER CODE END 2 */
 
