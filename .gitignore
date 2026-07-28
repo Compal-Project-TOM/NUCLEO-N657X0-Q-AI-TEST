@@ -23,3 +23,8 @@ Release/
 
 .DS_Store
 Thumbs.db
+
+.ai/
+project.stai
+
+.claude/
