@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "app_x-cube-ai.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -101,6 +102,7 @@ int main(void)
   MX_GPIO_Init();
   MX_CACHEAXI_Init();
   MX_LPUART1_UART_Init();
+  MX_X_CUBE_AI_Init();
   SystemIsolation_Config();
   /* USER CODE BEGIN 2 */
   printf("\r\nN657X0-Q Test AI application start\r\n");
@@ -114,6 +116,7 @@ int main(void)
 	HAL_Delay(200);
     /* USER CODE END WHILE */
 
+  MX_X_CUBE_AI_Process();
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
